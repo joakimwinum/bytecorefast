@@ -1,5 +1,5 @@
 pytest>=7.4.0,<8.3.0
-autopep8>=2.0.2,<2.2.0
+autopep8>=2.0.2,<2.3.0
 mypy>=1.4.0,<1.11.0
 build
 setuptools>=61.0
