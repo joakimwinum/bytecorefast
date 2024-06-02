@@ -1,8 +1,8 @@
 import pytest
-from bytecore.memory import Memory
-from bytecore.byte import Byte
-from bytecore.opcode import Opcode
-from bytecore.memory_bytes_builder import MemoryBytesBuilder
+from bytecorefast.memory import Memory
+from bytecorefast.byte import Byte
+from bytecorefast.opcode import Opcode
+from bytecorefast.memory_bytes_builder import MemoryBytesBuilder
 
 
 class TestMemoryBytesBuilder:

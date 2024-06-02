@@ -1,5 +1,5 @@
-from bytecore.byte_register import ByteRegister
-from bytecore.byte import Byte
+from bytecorefast.byte_register import ByteRegister
+from bytecorefast.byte import Byte
 
 
 class TestByteRegister:

@@ -1,5 +1,5 @@
 import pytest
-from bytecore.byte import Byte
+from bytecorefast.byte import Byte
 
 
 class TestByte:

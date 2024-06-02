@@ -1,5 +1,5 @@
 import pytest
-from bytecore.bit import Bit
+from bytecorefast.bit import Bit
 
 
 class TestBit:

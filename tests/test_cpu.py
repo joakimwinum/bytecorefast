@@ -1,9 +1,9 @@
-from bytecore.memory import Memory
-from bytecore.byte_register import ByteRegister
-from bytecore.cpu import Cpu
+from bytecorefast.memory import Memory
+from bytecorefast.byte_register import ByteRegister
+from bytecorefast.cpu import Cpu
 from bytecore.state import State
-from bytecore.byte import Byte
-from bytecore.opcode import Opcode
+from bytecorefast.byte import Byte
+from bytecorefast.opcode import Opcode
 
 
 class TestCpu:

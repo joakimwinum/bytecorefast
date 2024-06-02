@@ -1,4 +1,4 @@
-from bytecore.memory import Memory
+from bytecorefast.memory import Memory
 from bytecore.byte import Byte
 
 

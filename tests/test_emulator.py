@@ -1,9 +1,9 @@
-from bytecore.memory import Memory
+from bytecorefast.memory import Memory
 from bytecore.state import State
-from bytecore.byte import Byte
-from bytecore.opcode import Opcode
-from bytecore.emulator import ByteCore
-from bytecore.memory_bytes_builder import MemoryBytesBuilder
+from bytecorefast.byte import Byte
+from bytecorefast.opcode import Opcode
+from bytecorefast.emulator import ByteCore
+from bytecorefast.memory_bytes_builder import MemoryBytesBuilder
 
 
 class TestEmulator:

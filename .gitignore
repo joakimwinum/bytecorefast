@@ -1,5 +1,13 @@
 __pycache__/
 dist/
+build/
 .coverage
-src/bytecore.egg-info/
-src/example.py
+src/bytecorefast.egg-info/
+.cache/
+
+*.o
+*.so
+/test_*
+tests/unity.h
+tests/unity.c
+tests/unity_internals.h
