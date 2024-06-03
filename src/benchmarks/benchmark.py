@@ -20,7 +20,7 @@ class Benchmark:
 
     @staticmethod
     def get_bytecore_assembly_program_that_uses_exactly_100_000_cycles() -> list[Byte]:
-        memory_bytes = MemoryBytesBuilder()\
+        memory_bytes_builder = MemoryBytesBuilder()\
             .msb('00').lsb('00').load()\
             .msb('00').lsb('01').data('02')\
             .msb('00').lsb('02').data('00')\
@@ -50,8 +50,8 @@ class Benchmark:
             .msb('00').lsb('1A').data('1B')\
             .msb('00').lsb('1B').jmp()\
             .msb('00').lsb('1C').data('00')\
-            .msb('00').lsb('1D').data('00')\
-            \
+            .msb('00').lsb('1D').data('00')
+        memory_bytes_builder\
             .msb('00').lsb('1E').jmp()\
             .msb('00').lsb('1F').data('00')\
             .msb('00').lsb('20').data('21')\
@@ -93,14 +93,14 @@ class Benchmark:
             .msb('00').lsb('44').data('45')\
             .msb('00').lsb('45').jmp()\
             .msb('00').lsb('46').data('00')\
-            .msb('00').lsb('47').data('00')\
-            \
+            .msb('00').lsb('47').data('00')
+        memory_bytes_builder\
             .msb('01').lsb('00').data('01').comment('  1')\
-            .msb('01').lsb('01').data('63').comment(' 99')\
-            \
+            .msb('01').lsb('01').data('63').comment(' 99')
+        memory_bytes_builder\
             .msb('02').lsb('00').data('63').comment(' 99')\
-            .msb('02').lsb('01').data('64').comment('100')\
-            \
+            .msb('02').lsb('01').data('64').comment('100')
+        memory_bytes_builder\
             .msb('FF').lsb('00').jmp()\
             .msb('FF').lsb('01').data('FF')\
             .msb('FF').lsb('02').data('03')\
@@ -109,11 +109,10 @@ class Benchmark:
             .msb('FF').lsb('05').data('06')\
             .msb('FF').lsb('06').jmp()\
             .msb('FF').lsb('07').data('FF')\
-            .msb('FF').lsb('08').data('FF')\
-            \
-            .msb('FF').lsb('FF').halt()\
-            .build()
-        return memory_bytes
+            .msb('FF').lsb('08').data('FF')
+        memory_bytes_builder\
+            .msb('FF').lsb('FF').halt()
+        return memory_bytes_builder.build()
 
     @staticmethod
     def _get_timer(package) -> Timer:
