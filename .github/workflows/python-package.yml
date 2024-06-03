@@ -46,3 +46,6 @@ jobs:
     - name: Type checking with mypy
       run: |
         mypy --strict --exclude='src' .
+    - name: Calculate and log performance
+      run: |
+        python src/benchmarks/call_benchmark.py
