@@ -1,11 +1,15 @@
 from bytecore.byte import Byte
 from bytecore.memory_bytes_builder import MemoryBytesBuilder
+from benchmarks.cpu import Cpu
+import platform
 from timeit import Timer
 
 
 class Benchmark:
     NUMBER_OF_CYCLES: int = 100_000
     NUMBER_OF_REPEATED_TIMINGS: int = 5
+    BYTECORE_STEPS_PER_CYCLE: int = 9
+    PERCENTAGE_SCALE_FACTOR: int = 100
 
     PACKAGE_BYTECORE: str = 'bytecore'
     PACKAGE_BYTECOREFAST: str = 'bytecorefast'
@@ -146,6 +150,14 @@ class Benchmark:
         return Benchmark._get_number_of_cycles_per_second(Benchmark.PACKAGE_BYTECOREFAST)
 
     @staticmethod
+    def _convert_from_bytecore_cycles_per_second_to_steps_per_second(bytecore_cycles_per_second: int) -> int:
+        return Benchmark.BYTECORE_STEPS_PER_CYCLE * bytecore_cycles_per_second
+
+    @staticmethod
+    def _calculate_cpu_usage_ratio(emulator_steps_per_second: int, cpu_steps_per_second: int) -> float:
+        return (emulator_steps_per_second / cpu_steps_per_second) * Benchmark.PERCENTAGE_SCALE_FACTOR
+
+    @staticmethod
     def calculate_and_print_performance() -> None:
         bytecore_cycles_per_second = Benchmark.get_number_of_cycles_per_second_for_bytecore()
         bytecorefast_cycles_per_second = Benchmark.get_number_of_cycles_per_second_for_bytecorefast()
@@ -153,11 +165,30 @@ class Benchmark:
         speedup = int(bytecorefast_cycles_per_second /
                       bytecore_cycles_per_second)
 
+        current_cpu_steps_per_second = Cpu.get_cpu_speed_in_hz()
+        bytecore_steps_per_second = Benchmark._convert_from_bytecore_cycles_per_second_to_steps_per_second(
+            bytecore_cycles_per_second)
+        bytecorefast_steps_per_second = Benchmark._convert_from_bytecore_cycles_per_second_to_steps_per_second(
+            bytecorefast_cycles_per_second)
+
+        bytecore_cpu_usage_ratio = Benchmark._calculate_cpu_usage_ratio(
+            bytecore_steps_per_second, current_cpu_steps_per_second)
+        bytecorefast_cpu_usage_ratio = Benchmark._calculate_cpu_usage_ratio(
+            bytecorefast_steps_per_second, current_cpu_steps_per_second)
+
         formatted_message = (
             f"Performance Comparison:\n"
-            f"ByteCore Emulator: {bytecore_cycles_per_second} cycles/second\n"
-            f"ByteCoreFast Emulator: {bytecorefast_cycles_per_second} cycles/second\n"
-            f"ByteCoreFast is {speedup} times faster than ByteCore"
+            f"Both ByteCore and ByteCoreFast run a bytecore assembly program that takes exactly 100 000 cycles to complete\n\n"
+            f"ByteCore Emulator: {bytecore_cycles_per_second:,} cycles/second\n"
+            f"ByteCoreFast Emulator: {bytecorefast_cycles_per_second:,} cycles/second\n"
+            f"ByteCoreFast is {speedup:,} times faster than ByteCore\n\n"
+            f"Current CPU: {current_cpu_steps_per_second:,} steps/second (Hz)\n"
+            f"ByteCore Emulator: {bytecore_steps_per_second:,} steps/second\n"
+            f"ByteCoreFast Emulator: {bytecorefast_steps_per_second:,} steps/second\n"
+            f"ByteCore Emulator runs {bytecore_cpu_usage_ratio:.2f}% of current CPU steps/second\n"
+            f"ByteCoreFast Emulator runs {bytecorefast_cpu_usage_ratio:.2f}% of current CPU steps/second\n\n"
+            f"Processor: {platform.processor()}\n"
+            f"Operating System: {platform.system()}"
         )
 
         print(formatted_message)
