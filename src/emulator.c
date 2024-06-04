@@ -38,9 +38,9 @@ void free_emulator(emulator_s *emulator) {
     free(emulator);
 }
 
-static void _step(emulator_s *emulator);
-static void _increment_instruction_counter(emulator_s *emulator);
-static void _execute_instruction_step(emulator_s *emulator);
+static inline void _step(emulator_s *emulator);
+static inline void _increment_instruction_counter(emulator_s *emulator);
+static inline void _execute_instruction_step(emulator_s *emulator);
 
 void emulator_step(emulator_s *emulator) {
     if (emulator == NULL) {
@@ -50,12 +50,12 @@ void emulator_step(emulator_s *emulator) {
     _step(emulator);
 }
 
-static void _step(emulator_s *emulator) {
+static inline void _step(emulator_s *emulator) {
     _execute_instruction_step(emulator);
     _increment_instruction_counter(emulator);
 }
 
-static void _increment_instruction_counter(emulator_s *emulator) {
+static inline void _increment_instruction_counter(emulator_s *emulator) {
     emulator->control_unit->control_unit_state->cycle_step++;
 
     if (emulator->control_unit->control_unit_state->cycle_step >
@@ -64,17 +64,17 @@ static void _increment_instruction_counter(emulator_s *emulator) {
     }
 }
 
-static void _fetch(emulator_s *emulator);
-static void _decode(emulator_s *emulator);
-static void _evaluate_address_msb(emulator_s *emulator);
-static void _fetch_operand_msb(emulator_s *emulator);
-static void _evaluate_address_lsb(emulator_s *emulator);
-static void _fetch_operand_lsb(emulator_s *emulator);
-static void _execute(emulator_s *emulator);
-static void _store_result(emulator_s *emulator);
-static void _increment_pc(emulator_s *emulator);
+static inline void _fetch(emulator_s *emulator);
+static inline void _decode(emulator_s *emulator);
+static inline void _evaluate_address_msb(emulator_s *emulator);
+static inline void _fetch_operand_msb(emulator_s *emulator);
+static inline void _evaluate_address_lsb(emulator_s *emulator);
+static inline void _fetch_operand_lsb(emulator_s *emulator);
+static inline void _execute(emulator_s *emulator);
+static inline void _store_result(emulator_s *emulator);
+static inline void _increment_pc(emulator_s *emulator);
 
-static void _execute_instruction_step(emulator_s *emulator) {
+static inline void _execute_instruction_step(emulator_s *emulator) {
     switch (emulator->control_unit->control_unit_state->cycle_step) {
     case STEP_FETCH:
         _fetch(emulator);
@@ -106,27 +106,27 @@ static void _execute_instruction_step(emulator_s *emulator) {
     }
 }
 
-static void _move_pc_to_memory_address(emulator_s *emulator);
-static void _fetch_opcode_from_memory(emulator_s *emulator);
+static inline void _move_pc_to_memory_address(emulator_s *emulator);
+static inline void _fetch_opcode_from_memory(emulator_s *emulator);
 
-static void _fetch(emulator_s *emulator) {
+static inline void _fetch(emulator_s *emulator) {
     _move_pc_to_memory_address(emulator);
     _fetch_opcode_from_memory(emulator);
 }
 
-static void _move_pc_to_memory_address(emulator_s *emulator) {
+static inline void _move_pc_to_memory_address(emulator_s *emulator) {
     emulator->control_unit->memory->address_msb_register =
         emulator->control_unit->pc_msb_register;
     emulator->control_unit->memory->address_lsb_register =
         emulator->control_unit->pc_lsb_register;
 }
 
-static void _fetch_opcode_from_memory(emulator_s *emulator) {
+static inline void _fetch_opcode_from_memory(emulator_s *emulator) {
     emulator->control_unit->control_unit_state->opcode =
         memory_get_current_register(emulator->control_unit->memory);
 }
 
-static void _decode(emulator_s *emulator) {
+static inline void _decode(emulator_s *emulator) {
     switch (emulator->control_unit->control_unit_state->opcode) {
     case HALT:
     // fallthrough on purpose
@@ -149,9 +149,9 @@ static void _decode(emulator_s *emulator) {
     }
 }
 
-static void _increment_pc_registers(emulator_s *emulator);
+static inline void _increment_pc_registers(emulator_s *emulator);
 
-static void _evaluate_address_msb(emulator_s *emulator) {
+static inline void _evaluate_address_msb(emulator_s *emulator) {
     if (emulator->control_unit->control_unit_state->opcode == HALT) {
         return;
     }
@@ -159,7 +159,7 @@ static void _evaluate_address_msb(emulator_s *emulator) {
     _move_pc_to_memory_address(emulator);
 }
 
-static void _increment_pc_registers(emulator_s *emulator) {
+static inline void _increment_pc_registers(emulator_s *emulator) {
     if (emulator->control_unit->pc_lsb_register == BYTE_MAX_VALUE) {
         emulator->control_unit->pc_lsb_register = BYTE_MIN_VALUE;
 
@@ -173,38 +173,38 @@ static void _increment_pc_registers(emulator_s *emulator) {
     }
 }
 
-static void _fetch_mar_msb_from_memory(emulator_s *emulator);
+static inline void _fetch_mar_msb_from_memory(emulator_s *emulator);
 
-static void _fetch_operand_msb(emulator_s *emulator) {
+static inline void _fetch_operand_msb(emulator_s *emulator) {
     _fetch_mar_msb_from_memory(emulator);
 }
 
-static void _fetch_mar_msb_from_memory(emulator_s *emulator) {
+static inline void _fetch_mar_msb_from_memory(emulator_s *emulator) {
     emulator->control_unit->mar_msb_register =
         memory_get_current_register(emulator->control_unit->memory);
 }
 
-static void _evaluate_address_lsb(emulator_s *emulator) {
+static inline void _evaluate_address_lsb(emulator_s *emulator) {
     _evaluate_address_msb(emulator);
 }
 
-static void _fetch_mar_lsb_from_memory(emulator_s *emulator);
+static inline void _fetch_mar_lsb_from_memory(emulator_s *emulator);
 
-static void _fetch_operand_lsb(emulator_s *emulator) {
+static inline void _fetch_operand_lsb(emulator_s *emulator) {
     _fetch_mar_lsb_from_memory(emulator);
 }
 
-static void _fetch_mar_lsb_from_memory(emulator_s *emulator) {
+static inline void _fetch_mar_lsb_from_memory(emulator_s *emulator) {
     emulator->control_unit->mar_lsb_register =
         memory_get_current_register(emulator->control_unit->memory);
 }
 
-static void _move_mar_to_memory_address(emulator_s *emulator);
-static void _move_accumulator_to_temp(emulator_s *emulator);
-static void _add_memory_to_accumulator(emulator_s *emulator);
-static void _sub_memory_from_accumulator(emulator_s *emulator);
+static inline void _move_mar_to_memory_address(emulator_s *emulator);
+static inline void _move_accumulator_to_temp(emulator_s *emulator);
+static inline void _add_memory_to_accumulator(emulator_s *emulator);
+static inline void _sub_memory_from_accumulator(emulator_s *emulator);
 
-static void _execute(emulator_s *emulator) {
+static inline void _execute(emulator_s *emulator) {
     switch (emulator->control_unit->control_unit_state->opcode) {
     case HALT:
         emulator->control_unit->control_unit_state->is_halt = HIGH;
@@ -234,18 +234,18 @@ static void _execute(emulator_s *emulator) {
     }
 }
 
-static void _move_mar_to_memory_address(emulator_s *emulator) {
+static inline void _move_mar_to_memory_address(emulator_s *emulator) {
     emulator->control_unit->memory->address_msb_register =
         emulator->control_unit->mar_msb_register;
     emulator->control_unit->memory->address_lsb_register =
         emulator->control_unit->mar_lsb_register;
 }
 
-static void _move_accumulator_to_temp(emulator_s *emulator) {
+static inline void _move_accumulator_to_temp(emulator_s *emulator) {
     emulator->control_unit->temp_register = emulator->control_unit->accumulator;
 }
 
-static void _add_memory_to_accumulator(emulator_s *emulator) {
+static inline void _add_memory_to_accumulator(emulator_s *emulator) {
     byte temp = emulator->control_unit->temp_register;
     byte memory_register =
         memory_get_current_register(emulator->control_unit->memory);
@@ -255,7 +255,7 @@ static void _add_memory_to_accumulator(emulator_s *emulator) {
     emulator->control_unit->accumulator = result;
 }
 
-static void _sub_memory_from_accumulator(emulator_s *emulator) {
+static inline void _sub_memory_from_accumulator(emulator_s *emulator) {
     byte temp = emulator->control_unit->temp_register;
     byte memory_register =
         memory_get_current_register(emulator->control_unit->memory);
@@ -266,11 +266,11 @@ static void _sub_memory_from_accumulator(emulator_s *emulator) {
     emulator->control_unit->accumulator = result;
 }
 
-static void _move_memory_to_accumulator(emulator_s *emulator);
-static void _move_accumulator_to_memory(emulator_s *emulator);
-static void _move_mar_to_pc(emulator_s *emulator);
+static inline void _move_memory_to_accumulator(emulator_s *emulator);
+static inline void _move_accumulator_to_memory(emulator_s *emulator);
+static inline void _move_mar_to_pc(emulator_s *emulator);
 
-static void _store_result(emulator_s *emulator) {
+static inline void _store_result(emulator_s *emulator) {
     switch (emulator->control_unit->control_unit_state->opcode) {
     case HALT:
         // do nothing
@@ -298,24 +298,24 @@ static void _store_result(emulator_s *emulator) {
     }
 }
 
-static void _move_memory_to_accumulator(emulator_s *emulator) {
+static inline void _move_memory_to_accumulator(emulator_s *emulator) {
     emulator->control_unit->accumulator =
         memory_get_current_register(emulator->control_unit->memory);
 }
 
-static void _move_accumulator_to_memory(emulator_s *emulator) {
+static inline void _move_accumulator_to_memory(emulator_s *emulator) {
     memory_set_current_register(emulator->control_unit->memory,
                                 emulator->control_unit->accumulator);
 }
 
-static void _move_mar_to_pc(emulator_s *emulator) {
+static inline void _move_mar_to_pc(emulator_s *emulator) {
     emulator->control_unit->pc_msb_register =
         emulator->control_unit->mar_msb_register;
     emulator->control_unit->pc_lsb_register =
         emulator->control_unit->mar_lsb_register;
 }
 
-static void _increment_pc(emulator_s *emulator) {
+static inline void _increment_pc(emulator_s *emulator) {
     switch (emulator->control_unit->control_unit_state->opcode) {
     case HALT:
         // do nothing
@@ -343,7 +343,7 @@ static void _increment_pc(emulator_s *emulator) {
     }
 }
 
-static void _cycle(emulator_s *emulator);
+static inline void _cycle(emulator_s *emulator);
 
 void emulator_cycle(emulator_s *emulator) {
     if (emulator == NULL) {
@@ -353,7 +353,7 @@ void emulator_cycle(emulator_s *emulator) {
     _cycle(emulator);
 }
 
-static void _cycle(emulator_s *emulator) {
+static inline void _cycle(emulator_s *emulator) {
     while (true) {
         emulator_step(emulator);
         if (emulator->control_unit->control_unit_state->cycle_step ==
@@ -363,7 +363,7 @@ static void _cycle(emulator_s *emulator) {
     }
 }
 
-static void _cycle_until_halt(emulator_s *emulator);
+static inline void _cycle_until_halt(emulator_s *emulator);
 
 void emulator_cycle_until_halt(emulator_s *emulator) {
     if (emulator == NULL) {
@@ -373,7 +373,7 @@ void emulator_cycle_until_halt(emulator_s *emulator) {
     _cycle_until_halt(emulator);
 }
 
-static void _cycle_until_halt(emulator_s *emulator) {
+static inline void _cycle_until_halt(emulator_s *emulator) {
     while (true) {
         emulator_cycle(emulator);
         if (emulator->control_unit->control_unit_state->is_halt == HIGH) {
