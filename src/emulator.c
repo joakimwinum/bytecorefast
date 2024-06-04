@@ -38,6 +38,7 @@ void free_emulator(emulator_s *emulator) {
     free(emulator);
 }
 
+static void _step(emulator_s *emulator);
 static void _increment_instruction_counter(emulator_s *emulator);
 static void _execute_instruction_step(emulator_s *emulator);
 
@@ -46,6 +47,10 @@ void emulator_step(emulator_s *emulator) {
         return;
     }
 
+    _step(emulator);
+}
+
+static void _step(emulator_s *emulator) {
     _execute_instruction_step(emulator);
     _increment_instruction_counter(emulator);
 }
@@ -338,11 +343,17 @@ static void _increment_pc(emulator_s *emulator) {
     }
 }
 
+static void _cycle(emulator_s *emulator);
+
 void emulator_cycle(emulator_s *emulator) {
     if (emulator == NULL) {
         return;
     }
 
+    _cycle(emulator);
+}
+
+static void _cycle(emulator_s *emulator) {
     while (true) {
         emulator_step(emulator);
         if (emulator->control_unit->control_unit_state->cycle_step ==
@@ -352,11 +363,17 @@ void emulator_cycle(emulator_s *emulator) {
     }
 }
 
+static void _cycle_until_halt(emulator_s *emulator);
+
 void emulator_cycle_until_halt(emulator_s *emulator) {
     if (emulator == NULL) {
         return;
     }
 
+    _cycle_until_halt(emulator);
+}
+
+static void _cycle_until_halt(emulator_s *emulator) {
     while (true) {
         emulator_cycle(emulator);
         if (emulator->control_unit->control_unit_state->is_halt == HIGH) {
