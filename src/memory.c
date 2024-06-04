@@ -40,7 +40,7 @@ void free_memory(memory_s *memory) {
 static double_word _memory_get_index(memory_s *memory);
 
 byte memory_get_current_register(memory_s *memory) {
-    return memory->memory[_memory_get_index(memory)];
+    return *(memory->memory + _memory_get_index(memory));
 }
 
 static inline double_word _memory_get_index(memory_s *memory) {
@@ -48,5 +48,5 @@ static inline double_word _memory_get_index(memory_s *memory) {
 }
 
 void memory_set_current_register(memory_s *memory, byte value) {
-    memory->memory[_memory_get_index(memory)] = value;
+    *(memory->memory + _memory_get_index(memory)) = value;
 }
