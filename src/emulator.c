@@ -250,7 +250,7 @@ static inline void _add_memory_to_accumulator(emulator_s *emulator) {
     byte memory_register =
         memory_get_current_register(emulator->control_unit->memory);
 
-    byte result = (temp + memory_register) % BYTE_COUNT_VALUES;
+    byte result = (temp + memory_register) & 0xFF;
 
     emulator->control_unit->accumulator = result;
 }
