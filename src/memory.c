@@ -44,8 +44,7 @@ byte memory_get_current_register(memory_s *memory) {
 }
 
 static inline double_word _memory_get_index(memory_s *memory) {
-    return memory->address_msb_register * BYTE_COUNT_VALUES +
-           memory->address_lsb_register;
+    return (memory->address_msb_register << 8) | memory->address_lsb_register;
 }
 
 void memory_set_current_register(memory_s *memory, byte value) {
