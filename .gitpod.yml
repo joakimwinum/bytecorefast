@@ -2,7 +2,7 @@ image:
   file: .gitpod.Dockerfile
 tasks:
   - init: pip3 install -r requirements.txt && ./setup_unity.sh
-    command: autopep8 . --recursive --in-place && pip3 install --editable . && (pytest || true) && mypy --strict --exclude='src' . && find src tests -name "*.h" -o -name "*.c" | xargs clang-format -i && rm -rf build && mkdir build && cd build && cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON .. && (make || true) && cd .. && find src tests -name "*.h" -o -name "*.c" | xargs clang-tidy -p build
+    command: autopep8 . --recursive --in-place && pip3 install --editable . && (pytest || true) && mypy --strict --exclude='src' . && find src tests -name "*.h" -o -name "*.c" | xargs clang-format -i && rm -rf build && mkdir build && cd build && cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON .. && (make || true) && cd .. && find src tests -name "*.h" -o -name "*.c" | xargs clang-tidy -p build && python src/benchmarks/call_benchmark.py
 vscode:
   extensions:
     - streetsidesoftware.code-spell-checker # The Code Spell Checker extension is GPLv3-licensed, separate from this project. See its docs for details.
