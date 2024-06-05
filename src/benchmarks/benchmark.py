@@ -165,16 +165,10 @@ class Benchmark:
         speedup = int(bytecorefast_cycles_per_second /
                       bytecore_cycles_per_second)
 
-        current_cpu_steps_per_second = Cpu.get_cpu_speed_in_hz()
         bytecore_steps_per_second = Benchmark._convert_from_bytecore_cycles_per_second_to_steps_per_second(
             bytecore_cycles_per_second)
         bytecorefast_steps_per_second = Benchmark._convert_from_bytecore_cycles_per_second_to_steps_per_second(
             bytecorefast_cycles_per_second)
-
-        bytecore_cpu_usage_ratio = Benchmark._calculate_cpu_usage_ratio(
-            bytecore_steps_per_second, current_cpu_steps_per_second)
-        bytecorefast_cpu_usage_ratio = Benchmark._calculate_cpu_usage_ratio(
-            bytecorefast_steps_per_second, current_cpu_steps_per_second)
 
         formatted_message = (
             f"Performance Comparison:\n"
@@ -182,11 +176,26 @@ class Benchmark:
             f"ByteCore Emulator: {bytecore_cycles_per_second:,} cycles/second\n"
             f"ByteCoreFast Emulator: {bytecorefast_cycles_per_second:,} cycles/second\n"
             f"ByteCoreFast is {speedup:,} times faster than ByteCore\n\n"
-            f"Current CPU: {current_cpu_steps_per_second:,} steps/second (Hz)\n"
             f"ByteCore Emulator: {bytecore_steps_per_second:,} steps/second\n"
             f"ByteCoreFast Emulator: {bytecorefast_steps_per_second:,} steps/second\n"
-            f"ByteCore Emulator runs {bytecore_cpu_usage_ratio:.2f}% of current CPU steps/second\n"
-            f"ByteCoreFast Emulator runs {bytecorefast_cpu_usage_ratio:.2f}% of current CPU steps/second\n\n"
+        )
+
+        if (Cpu.is_cpu_speed_available()):
+            current_cpu_steps_per_second = Cpu.get_cpu_speed_in_hz()
+
+            bytecore_cpu_usage_ratio = Benchmark._calculate_cpu_usage_ratio(
+                bytecore_steps_per_second, current_cpu_steps_per_second)
+            bytecorefast_cpu_usage_ratio = Benchmark._calculate_cpu_usage_ratio(
+                bytecorefast_steps_per_second, current_cpu_steps_per_second)
+
+            formatted_message += (
+                f"Current CPU: {current_cpu_steps_per_second:,} steps/second (Hz)\n"
+                f"ByteCore Emulator runs {bytecore_cpu_usage_ratio:.2f}% of current CPU steps/second\n"
+                f"ByteCoreFast Emulator runs {bytecorefast_cpu_usage_ratio:.2f}% of current CPU steps/second\n"
+            )
+
+        formatted_message += (
+            f"\n"
             f"Processor: {platform.processor()}\n"
             f"Operating System: {platform.system()}"
         )
