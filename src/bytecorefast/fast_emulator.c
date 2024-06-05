@@ -7,7 +7,6 @@
 static struct PyModuleDef fast_emulator;
 static PyTypeObject FastEmulatorType;
 static PyTypeObject FastEmulatorType;
-static PyMethodDef FastEmulator_methods[];
 
 typedef struct {
     PyObject_HEAD emulator_s *emulator;
@@ -53,6 +52,15 @@ static struct PyModuleDef fast_emulator = {
     .m_size = -1,
 };
 
+static PyMethodDef FastEmulator_methods[] = {
+    {"step", (PyCFunction)FastEmulator_step, METH_NOARGS, ""},
+    {"cycle", (PyCFunction)FastEmulator_cycle, METH_NOARGS, ""},
+    {"cycle_until_halt", (PyCFunction)FastEmulator_cycle_until_halt,
+     METH_NOARGS, ""},
+    {"dump", (PyCFunction)FastEmulator_dump, METH_NOARGS, ""},
+    {NULL, NULL, METH_NOARGS, ""} /* Sentinel */
+};
+
 static PyTypeObject FastEmulatorType = {
     PyVarObject_HEAD_INIT(NULL, 0).tp_name = "fast_emulator.FastEmulator",
     .tp_basicsize = sizeof(FastEmulatorObject),
@@ -62,15 +70,6 @@ static PyTypeObject FastEmulatorType = {
     .tp_init = (initproc)FastEmulator_init,
     .tp_dealloc = (destructor)FastEmulator_dealloc,
     .tp_methods = FastEmulator_methods,
-};
-
-static PyMethodDef FastEmulator_methods[] = {
-    {"step", (PyCFunction)FastEmulator_step, METH_NOARGS, ""},
-    {"cycle", (PyCFunction)FastEmulator_cycle, METH_NOARGS, ""},
-    {"cycle_until_halt", (PyCFunction)FastEmulator_cycle_until_halt,
-     METH_NOARGS, ""},
-    {"dump", (PyCFunction)FastEmulator_dump, METH_NOARGS, ""},
-    {NULL, NULL, METH_NOARGS, ""} /* Sentinel */
 };
 
 static int FastEmulator_init(FastEmulatorObject *self, PyObject *args) {
