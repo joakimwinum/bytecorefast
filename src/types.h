@@ -1,8 +1,8 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-#include <bits/stdint-uintn.h>
 #include <stdbool.h>
+#include <stdint.h> // IWYU pragma: keep
 
 typedef bool bit;
 typedef uint8_t byte;
