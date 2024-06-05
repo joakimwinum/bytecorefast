@@ -1,4 +1,4 @@
-name: Python package
+name: Python tests
 
 on:
   push:
@@ -23,9 +23,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        python -m pip install autopep8 flake8 coverage pytest mypy
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        pip install -r requirements.txt
     - name: Lint with autopep8 and get statistics from flake8
       run: |
         # exit-zero treats all errors as warnings.
