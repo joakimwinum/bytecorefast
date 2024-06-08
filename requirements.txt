@@ -7,5 +7,6 @@ build
 setuptools>=61.0
 types-setuptools
 wheel
+twine
 psutil>=5.9.8,<5.10.0
 bytecore==1.1.1
