@@ -1,5 +1,5 @@
-#ifndef EMULATOR_H
-#define EMULATOR_H
+#ifndef BYTECOREFAST_EMULATOR_H
+#define BYTECOREFAST_EMULATOR_H
 
 #include "control_unit.h"
 #include "memory.h"
@@ -24,4 +24,4 @@ void emulator_cycle_until_halt(emulator_s *emulator);
 state_s *
 emulator_dump(emulator_s *emulator); // remember to call free on state_s
 
-#endif // EMULATOR_H
+#endif // BYTECOREFAST_EMULATOR_H

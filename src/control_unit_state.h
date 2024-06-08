@@ -1,5 +1,5 @@
-#ifndef CONTROL_UNIT_STATE_H
-#define CONTROL_UNIT_STATE_H
+#ifndef BYTECOREFAST_CONTROL_UNIT_STATE_H
+#define BYTECOREFAST_CONTROL_UNIT_STATE_H
 
 #include "types.h"
 
@@ -9,4 +9,4 @@ typedef struct {
     bit is_halt;
 } control_unit_state_s;
 
-#endif // CONTROL_UNIT_STATE_H
+#endif // BYTECOREFAST_CONTROL_UNIT_STATE_H

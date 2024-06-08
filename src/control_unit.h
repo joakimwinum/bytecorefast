@@ -1,5 +1,5 @@
-#ifndef CONTROL_UNIT_H
-#define CONTROL_UNIT_H
+#ifndef BYTECOREFAST_CONTROL_UNIT_H
+#define BYTECOREFAST_CONTROL_UNIT_H
 
 #include "control_unit_state.h"
 #include "memory.h"
@@ -22,4 +22,4 @@ void free_control_unit(
     control_unit_s
         *control_unit); // This will NOT free memory_s, but everything else
 
-#endif // CONTROL_UNIT_H
+#endif // BYTECOREFAST_CONTROL_UNIT_H

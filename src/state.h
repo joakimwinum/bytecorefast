@@ -1,5 +1,5 @@
-#ifndef STATE_H
-#define STATE_H
+#ifndef BYTECOREFAST_STATE_H
+#define BYTECOREFAST_STATE_H
 
 #include "types.h"
 #include <stdlib.h>
@@ -20,4 +20,4 @@ typedef struct {
     bit is_halt;
 } state_s;
 
-#endif // STATE_H
+#endif // BYTECOREFAST_STATE_H

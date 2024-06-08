@@ -1,5 +1,5 @@
-#ifndef CONSTANTS_H
-#define CONSTANTS_H
+#ifndef BYTECOREFAST_CONSTANTS_H
+#define BYTECOREFAST_CONSTANTS_H
 
 // Bit constants
 #define LOW 0
@@ -37,4 +37,4 @@
 #define JMP 16
 #define JZ 32
 
-#endif // CONSTANTS_H
+#endif // BYTECOREFAST_CONSTANTS_H
