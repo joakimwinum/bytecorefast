@@ -8,9 +8,12 @@ module = Extension(
         'src/control_unit.c',
         'src/memory.c'
     ],
-    include_dirs=['src']
+    include_dirs=['src'],
 )
 
 setup(
-    ext_modules=[module]
+    ext_modules=[module],
+    package_dir={'': 'src'},
+    package_data={'': ['*.h']},
+    include_package_data=True,
 )

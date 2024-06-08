@@ -1,0 +1,5 @@
+# Include
+include src/*.c
+include src/*.h
+include src/bytecorefast/*.c
+include src/bytecorefast/*.h
