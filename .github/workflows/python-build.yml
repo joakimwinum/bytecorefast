@@ -42,9 +42,22 @@ jobs:
       run: |
         mypy --strict --exclude='src' .
 
+  c-tests:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
+    - name: Install Unity
+      run: ./setup_unity.sh
+    - name: cmake
+      run: mkdir build && cd build && cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..
+    - name: make and test
+      run: cd build && make
+
   build:
 
-    needs: python-tests
+    needs: [python-tests, c-tests]
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -83,7 +96,7 @@ jobs:
 
   combine:
 
-    needs: [python-tests, build]
+    needs: [python-tests, c-tests, build]
     runs-on: ubuntu-latest
 
     steps:
