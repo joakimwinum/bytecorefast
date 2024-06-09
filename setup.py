@@ -9,6 +9,7 @@ module = Extension(
         'src/memory.c'
     ],
     include_dirs=['src'],
+    extra_compile_args=['-O3'],
 )
 
 setup(
