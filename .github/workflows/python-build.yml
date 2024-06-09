@@ -26,7 +26,7 @@ jobs:
       - name: Build package (Linux)
         if: runner.os == 'Linux'
         run: |
-          docker run -it --rm --name manylinux -v $(pwd):/bytecorefast $MANYLINUX_DOCKER_IMAGE /bin/bash -c "cd bytecorefast && /opt/python/cp311-cp311/bin/python3.11 -m build && mkdir dist/wheels && mv dist/*.whl dist/wheels && auditwheel repair dist/wheels/*.whl -w dist/ && rm -rf dist/wheels"
+          docker run --rm --name manylinux -v $(pwd):/bytecorefast $MANYLINUX_DOCKER_IMAGE /bin/bash -c "cd bytecorefast && /opt/python/cp311-cp311/bin/python3.11 -m build && mkdir dist/wheels && mv dist/*.whl dist/wheels && auditwheel repair dist/wheels/*.whl -w dist/ && rm -rf dist/wheels"
       - name: Build package (macOS and Windows)
         if: runner.os == 'macOS' || runner.os == 'Windows'
         run: python -m build
