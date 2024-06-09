@@ -1,4 +1,4 @@
-from setuptools import setup, Extension
+from setuptools import setup, Extension, find_packages
 
 module = Extension(
     'bytecorefast.fast_emulator',
@@ -13,6 +13,7 @@ module = Extension(
 
 setup(
     ext_modules=[module],
+    packages=find_packages(where='src', exclude=['benchmarks', 'tests']),
     package_dir={'': 'src'},
     package_data={'': ['*.h']},
     include_package_data=True,
