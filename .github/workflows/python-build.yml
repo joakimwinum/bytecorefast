@@ -35,3 +35,8 @@ jobs:
           pip install dist/bytecorefast-*.tar.gz
           python -c "import bytecorefast; print(bytecorefast)"
         shell: bash
+      - name: Upload distribution archives
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808
+        with:
+          name: distribution-archives-${{ matrix.os }}-${{ matrix.python-version }}
+          path: dist
