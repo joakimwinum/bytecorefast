@@ -41,7 +41,7 @@ jobs:
           name: distribution-archives-${{ matrix.os }}-${{ matrix.python-version }}
           path: dist
 
-  download:
+  combine:
 
     needs: build
     runs-on: ubuntu-latest
