@@ -7,9 +7,9 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-static void emulator_step(emulator_s *emulator);
-static void emulator_cycle(emulator_s *emulator);
-static void emulator_cycle_until_halt(emulator_s *emulator);
+static status emulator_step(emulator_s *emulator);
+static status emulator_cycle(emulator_s *emulator);
+static status emulator_cycle_until_halt(emulator_s *emulator);
 static state_s *emulator_dump(emulator_s *emulator);
 
 emulator_s *create_emulator(memory_s *memory) {
@@ -47,12 +47,14 @@ static inline void _step(emulator_s *emulator);
 static inline void _increment_instruction_counter(emulator_s *emulator);
 static inline void _execute_instruction_step(emulator_s *emulator);
 
-static void emulator_step(emulator_s *emulator) {
+static status emulator_step(emulator_s *emulator) {
     if (emulator == NULL) {
-        return;
+        return STATUS_ERROR;
     }
 
     _step(emulator);
+
+    return STATUS_OK;
 }
 
 static inline void _step(emulator_s *emulator) {
@@ -350,12 +352,14 @@ static inline void _increment_pc(emulator_s *emulator) {
 
 static inline void _cycle(emulator_s *emulator);
 
-static void emulator_cycle(emulator_s *emulator) {
+static status emulator_cycle(emulator_s *emulator) {
     if (emulator == NULL) {
-        return;
+        return STATUS_ERROR;
     }
 
     _cycle(emulator);
+
+    return STATUS_OK;
 }
 
 static inline void _cycle(emulator_s *emulator) {
@@ -370,12 +374,14 @@ static inline void _cycle(emulator_s *emulator) {
 
 static inline void _cycle_until_halt(emulator_s *emulator);
 
-static void emulator_cycle_until_halt(emulator_s *emulator) {
+static status emulator_cycle_until_halt(emulator_s *emulator) {
     if (emulator == NULL) {
-        return;
+        return STATUS_ERROR;
     }
 
     _cycle_until_halt(emulator);
+
+    return STATUS_OK;
 }
 
 static inline void _cycle_until_halt(emulator_s *emulator) {

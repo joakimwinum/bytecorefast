@@ -1470,6 +1470,198 @@ void test__cycle__chaining_load_sub_store_jmp_jz__accumulator_and_pc_and_stored_
     }
 }
 
+void test__step__call_once__returns_status_ok(void) {
+    // Arrange
+    memory_s *memory = create_memory();
+    status status;
+
+    // Assert
+    TEST_ASSERT_NOT_NULL(memory);
+
+    // Arrange
+    emulator_s *emulator = create_emulator(memory);
+
+    // Assert
+    TEST_ASSERT_NOT_NULL(emulator);
+    TEST_ASSERT_NOT_NULL(emulator->control_unit);
+
+    TEST_ASSERT_NOT_NULL(emulator->step);
+
+    // Act
+    status = emulator->step(emulator);
+
+    // Assert
+    TEST_ASSERT_EQUAL_INT(STATUS_OK, status);
+
+    // Cleanup
+    if (emulator) {
+        free_emulator(emulator);
+    }
+    if (memory) {
+        free_memory(memory);
+    }
+}
+
+void test__step__null_pointer__returns_status_error(void) {
+    // Arrange
+    memory_s *memory = create_memory();
+    status status;
+
+    // Assert
+    TEST_ASSERT_NOT_NULL(memory);
+
+    // Arrange
+    emulator_s *emulator = create_emulator(memory);
+
+    // Assert
+    TEST_ASSERT_NOT_NULL(emulator);
+    TEST_ASSERT_NOT_NULL(emulator->control_unit);
+
+    TEST_ASSERT_NOT_NULL(emulator->step);
+
+    // Act
+    status = emulator->step(NULL);
+
+    // Assert
+    TEST_ASSERT_EQUAL_INT(STATUS_ERROR, status);
+
+    // Cleanup
+    if (emulator) {
+        free_emulator(emulator);
+    }
+    if (memory) {
+        free_memory(memory);
+    }
+}
+
+void test__cycle__call_once__returns_status_ok(void) {
+    // Arrange
+    memory_s *memory = create_memory();
+    status status;
+
+    // Assert
+    TEST_ASSERT_NOT_NULL(memory);
+
+    // Arrange
+    emulator_s *emulator = create_emulator(memory);
+
+    // Assert
+    TEST_ASSERT_NOT_NULL(emulator);
+    TEST_ASSERT_NOT_NULL(emulator->control_unit);
+
+    TEST_ASSERT_NOT_NULL(emulator->cycle);
+
+    // Act
+    status = emulator->cycle(emulator);
+
+    // Assert
+    TEST_ASSERT_EQUAL_INT(STATUS_OK, status);
+
+    // Cleanup
+    if (emulator) {
+        free_emulator(emulator);
+    }
+    if (memory) {
+        free_memory(memory);
+    }
+}
+
+void test__cycle__null_pointer__returns_status_error(void) {
+    // Arrange
+    memory_s *memory = create_memory();
+    status status;
+
+    // Assert
+    TEST_ASSERT_NOT_NULL(memory);
+
+    // Arrange
+    emulator_s *emulator = create_emulator(memory);
+
+    // Assert
+    TEST_ASSERT_NOT_NULL(emulator);
+    TEST_ASSERT_NOT_NULL(emulator->control_unit);
+
+    TEST_ASSERT_NOT_NULL(emulator->cycle);
+
+    // Act
+    status = emulator->cycle(NULL);
+
+    // Assert
+    TEST_ASSERT_EQUAL_INT(STATUS_ERROR, status);
+
+    // Cleanup
+    if (emulator) {
+        free_emulator(emulator);
+    }
+    if (memory) {
+        free_memory(memory);
+    }
+}
+
+void test__cycle_until_halt__call_once__returns_status_ok(void) {
+    // Arrange
+    memory_s *memory = create_memory();
+    status status;
+
+    // Assert
+    TEST_ASSERT_NOT_NULL(memory);
+
+    // Arrange
+    emulator_s *emulator = create_emulator(memory);
+
+    // Assert
+    TEST_ASSERT_NOT_NULL(emulator);
+    TEST_ASSERT_NOT_NULL(emulator->control_unit);
+
+    TEST_ASSERT_NOT_NULL(emulator->cycle_until_halt);
+
+    // Act
+    status = emulator->cycle_until_halt(emulator);
+
+    // Assert
+    TEST_ASSERT_EQUAL_INT(STATUS_OK, status);
+
+    // Cleanup
+    if (emulator) {
+        free_emulator(emulator);
+    }
+    if (memory) {
+        free_memory(memory);
+    }
+}
+
+void test__cycle_until_halt__null_pointer__returns_status_error(void) {
+    // Arrange
+    memory_s *memory = create_memory();
+    status status;
+
+    // Assert
+    TEST_ASSERT_NOT_NULL(memory);
+
+    // Arrange
+    emulator_s *emulator = create_emulator(memory);
+
+    // Assert
+    TEST_ASSERT_NOT_NULL(emulator);
+    TEST_ASSERT_NOT_NULL(emulator->control_unit);
+
+    TEST_ASSERT_NOT_NULL(emulator->cycle_until_halt);
+
+    // Act
+    status = emulator->cycle_until_halt(NULL);
+
+    // Assert
+    TEST_ASSERT_EQUAL_INT(STATUS_ERROR, status);
+
+    // Cleanup
+    if (emulator) {
+        free_emulator(emulator);
+    }
+    if (memory) {
+        free_memory(memory);
+    }
+}
+
 int main(void) {
     UNITY_BEGIN();
     RUN_TEST(test__create_emulator__default_memory__returns_non_null);
@@ -1516,5 +1708,11 @@ int main(void) {
         test__cycle__chaining_load_add_store_jmp_jz__accumulator_and_pc_and_stored_value_contains_expected_values);
     RUN_TEST(
         test__cycle__chaining_load_sub_store_jmp_jz__accumulator_and_pc_and_stored_value_contains_expected_values);
+    RUN_TEST(test__step__call_once__returns_status_ok);
+    RUN_TEST(test__step__null_pointer__returns_status_error);
+    RUN_TEST(test__cycle__call_once__returns_status_ok);
+    RUN_TEST(test__cycle__null_pointer__returns_status_error);
+    RUN_TEST(test__cycle_until_halt__call_once__returns_status_ok);
+    RUN_TEST(test__cycle_until_halt__null_pointer__returns_status_error);
     return UNITY_END();
 }
