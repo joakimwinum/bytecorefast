@@ -118,6 +118,11 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/')
     needs: [python-tests, c-tests, build, combine]
     runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/project/bytecorefast
+    permissions:
+      id-token: write
 
     steps:
     - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
@@ -165,5 +170,3 @@ jobs:
         skip-existing: false
         verbose: false
         print-hash: true
-        user: __token__
-        password: ${{ secrets.PYPI_API_TOKEN }}
