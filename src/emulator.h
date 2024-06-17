@@ -8,6 +8,9 @@
 typedef int status;
 #define STATUS_OK 0
 #define STATUS_ERROR -1
+#define STATUS_SIGNAL_DETECTED 1
+
+typedef status (*check_signals_function)();
 
 typedef struct emulator {
     control_unit_s *control_unit;
@@ -15,7 +18,8 @@ typedef struct emulator {
     // Functions
     status (*step)(struct emulator *self);
     status (*cycle)(struct emulator *self);
-    status (*cycle_until_halt)(struct emulator *self);
+    status (*cycle_until_halt)(struct emulator *self,
+                               check_signals_function check_signals);
     state_s *(*dump)(struct emulator *self); // remember to call free on state_s
 } emulator_s;
 

@@ -154,7 +154,7 @@ void test__cycle_until_halt__call_once__nothing_happens(void) {
     TEST_ASSERT_NOT_NULL(emulator->cycle_until_halt);
 
     // Act
-    emulator->cycle_until_halt(emulator);
+    emulator->cycle_until_halt(emulator, NULL);
 
     // Cleanup
     if (emulator) {
@@ -394,7 +394,7 @@ void test__cycle_until_halt__cycle_until_halt__dump_contains_expected_values(
     TEST_ASSERT_NOT_NULL(emulator->dump);
 
     // Act and assert
-    emulator->cycle_until_halt(emulator);
+    emulator->cycle_until_halt(emulator, NULL);
     state = emulator->dump(emulator);
 
     // Assert
@@ -561,7 +561,7 @@ void test__cycle_until_halt__simple_example_program__halts_and_last_memory_locat
     TEST_ASSERT_NOT_NULL(emulator);
 
     // Act
-    emulator->cycle_until_halt(emulator);
+    emulator->cycle_until_halt(emulator, NULL);
     state = emulator->dump(emulator);
 
     // Assert
@@ -686,7 +686,7 @@ void test__cycle_until_halt__advanced_example_program_that_tests_all_opcodes__ha
     TEST_ASSERT_NOT_NULL(emulator);
 
     // Act
-    emulator->cycle_until_halt(emulator);
+    emulator->cycle_until_halt(emulator, NULL);
     state = emulator->dump(emulator);
 
     // Assert
@@ -1616,7 +1616,7 @@ void test__cycle_until_halt__call_once__returns_status_ok(void) {
     TEST_ASSERT_NOT_NULL(emulator->cycle_until_halt);
 
     // Act
-    status = emulator->cycle_until_halt(emulator);
+    status = emulator->cycle_until_halt(emulator, NULL);
 
     // Assert
     TEST_ASSERT_EQUAL_INT(STATUS_OK, status);
@@ -1648,10 +1648,165 @@ void test__cycle_until_halt__null_pointer__returns_status_error(void) {
     TEST_ASSERT_NOT_NULL(emulator->cycle_until_halt);
 
     // Act
-    status = emulator->cycle_until_halt(NULL);
+    status = emulator->cycle_until_halt(NULL, NULL);
 
     // Assert
     TEST_ASSERT_EQUAL_INT(STATUS_ERROR, status);
+
+    // Cleanup
+    if (emulator) {
+        free_emulator(emulator);
+    }
+    if (memory) {
+        free_memory(memory);
+    }
+}
+
+void test__cycle_until_halt__pass_no_check_signals_function__returns_status_ok(
+    void) {
+    // Arrange
+    memory_s *memory = create_memory();
+    status status;
+
+    // Assert
+    TEST_ASSERT_NOT_NULL(memory);
+
+    // Arrange
+    emulator_s *emulator = create_emulator(memory);
+
+    // Assert
+    TEST_ASSERT_NOT_NULL(emulator);
+    TEST_ASSERT_NOT_NULL(emulator->control_unit);
+
+    TEST_ASSERT_NOT_NULL(emulator->cycle_until_halt);
+
+    // Act
+    status = emulator->cycle_until_halt(emulator, NULL);
+
+    // Assert
+    TEST_ASSERT_EQUAL_INT(STATUS_OK, status);
+
+    // Cleanup
+    if (emulator) {
+        free_emulator(emulator);
+    }
+    if (memory) {
+        free_memory(memory);
+    }
+}
+
+static memory_s *get_program_that_runs_for_2_cycles() {
+    memory_s *memory = create_memory();
+
+    if (memory == NULL) {
+        return NULL;
+    }
+
+    memory->memory[0] = JZ;
+    memory->memory[1] = 0;
+    memory->memory[2] = 3;
+    memory->memory[3] = HALT;
+
+    return memory;
+}
+
+void test__get_program_that_runs_for_2_cycles__no_input__runs_2_cycles_before_halting(
+    void) {
+    // Arrange
+    memory_s *memory = get_program_that_runs_for_2_cycles();
+
+    // Assert
+    TEST_ASSERT_NOT_NULL(memory);
+
+    emulator_s *emulator = create_emulator(memory);
+
+    // Assert
+    TEST_ASSERT_NOT_NULL(emulator);
+
+    // Act
+    emulator->cycle(emulator);
+
+    // Assert
+    TEST_ASSERT_EQUAL_UINT8(
+        LOW, emulator->control_unit->control_unit_state->is_halt);
+
+    // Act
+    emulator->cycle(emulator);
+
+    // Assert
+    TEST_ASSERT_EQUAL_UINT8(
+        HIGH, emulator->control_unit->control_unit_state->is_halt);
+
+    // Cleanup
+    if (emulator) {
+        free_emulator(emulator);
+    }
+    if (memory) {
+        free_memory(memory);
+    }
+}
+
+static status mock_check_signals_always_status_ok() { return STATUS_OK; }
+
+void test__cycle_until_halt__program_that_runs_for_2_cycles_and_pass_mock_check_signals_always_status_ok__returns_status_ok(
+    void) {
+    // Arrange
+    check_signals_function check_signals = mock_check_signals_always_status_ok;
+    status status;
+
+    memory_s *memory = get_program_that_runs_for_2_cycles();
+
+    // Assert
+    TEST_ASSERT_NOT_NULL(memory);
+
+    emulator_s *emulator = create_emulator(memory);
+
+    // Assert
+    TEST_ASSERT_NOT_NULL(emulator);
+    TEST_ASSERT_NOT_NULL(emulator->cycle_until_halt);
+
+    // Act
+    status = emulator->cycle_until_halt(emulator, check_signals);
+
+    // Assert
+    TEST_ASSERT_EQUAL_INT(STATUS_OK, status);
+
+    // Cleanup
+    if (emulator) {
+        free_emulator(emulator);
+    }
+    if (memory) {
+        free_memory(memory);
+    }
+}
+
+static status mock_check_signals_always_status_signal_detected() {
+    return STATUS_SIGNAL_DETECTED;
+}
+
+void test__cycle_until_halt__program_that_runs_for_2_cycles_and_pass_mock_check_signals_always_status_signal_detected__returns_signal_detected(
+    void) {
+    // Arrange
+    check_signals_function check_signals =
+        mock_check_signals_always_status_signal_detected;
+    status status;
+
+    memory_s *memory = get_program_that_runs_for_2_cycles();
+
+    // Assert
+    TEST_ASSERT_NOT_NULL(memory);
+
+    emulator_s *emulator = create_emulator(memory);
+
+    // Assert
+    TEST_ASSERT_NOT_NULL(emulator);
+    TEST_ASSERT_NOT_NULL(emulator->cycle_until_halt);
+
+    // Act
+    status = emulator->cycle_until_halt(emulator, check_signals);
+
+    // Assert
+    TEST_ASSERT_EQUAL_INT(STATUS_SIGNAL_DETECTED, status);
 
     // Cleanup
     if (emulator) {
@@ -1714,5 +1869,13 @@ int main(void) {
     RUN_TEST(test__cycle__null_pointer__returns_status_error);
     RUN_TEST(test__cycle_until_halt__call_once__returns_status_ok);
     RUN_TEST(test__cycle_until_halt__null_pointer__returns_status_error);
+    RUN_TEST(
+        test__cycle_until_halt__pass_no_check_signals_function__returns_status_ok);
+    RUN_TEST(
+        test__get_program_that_runs_for_2_cycles__no_input__runs_2_cycles_before_halting);
+    RUN_TEST(
+        test__cycle_until_halt__program_that_runs_for_2_cycles_and_pass_mock_check_signals_always_status_ok__returns_status_ok);
+    RUN_TEST(
+        test__cycle_until_halt__program_that_runs_for_2_cycles_and_pass_mock_check_signals_always_status_signal_detected__returns_signal_detected);
     return UNITY_END();
 }

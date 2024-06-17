@@ -177,7 +177,7 @@ static PyObject *FastEmulator_cycle_until_halt(FastEmulatorObject *self,
         return NULL;
     }
 
-    self->emulator->cycle_until_halt(self->emulator);
+    self->emulator->cycle_until_halt(self->emulator, NULL);
 
     Py_RETURN_NONE;
 }

@@ -9,7 +9,8 @@
 
 static status emulator_step(emulator_s *emulator);
 static status emulator_cycle(emulator_s *emulator);
-static status emulator_cycle_until_halt(emulator_s *emulator);
+static status emulator_cycle_until_halt(emulator_s *emulator,
+                                        check_signals_function check_signals);
 static state_s *emulator_dump(emulator_s *emulator);
 
 emulator_s *create_emulator(memory_s *memory) {
@@ -372,25 +373,33 @@ static inline void _cycle(emulator_s *emulator) {
     }
 }
 
-static inline void _cycle_until_halt(emulator_s *emulator);
+static inline status _cycle_until_halt(emulator_s *emulator,
+                                       check_signals_function check_signals);
 
-static status emulator_cycle_until_halt(emulator_s *emulator) {
+static status emulator_cycle_until_halt(emulator_s *emulator,
+                                        check_signals_function check_signals) {
     if (emulator == NULL) {
         return STATUS_ERROR;
     }
 
-    _cycle_until_halt(emulator);
-
-    return STATUS_OK;
+    return _cycle_until_halt(emulator, check_signals);
 }
 
-static inline void _cycle_until_halt(emulator_s *emulator) {
+static inline status _cycle_until_halt(emulator_s *emulator,
+                                       check_signals_function check_signals) {
     while (true) {
         emulator_cycle(emulator);
+
         if (emulator->control_unit->control_unit_state->is_halt == HIGH) {
             break;
         }
+
+        if (check_signals != NULL && check_signals() != STATUS_OK) {
+            return STATUS_SIGNAL_DETECTED;
+        }
     }
+
+    return STATUS_OK;
 }
 
 static state_s *emulator_dump(emulator_s *emulator) {
