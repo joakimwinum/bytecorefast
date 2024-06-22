@@ -66,6 +66,7 @@ jobs:
 
     env:
       MANYLINUX_DOCKER_IMAGE: quay.io/pypa/manylinux_2_28_x86_64
+      PACKAGE_NAME: bytecorefast
 
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
@@ -78,14 +79,14 @@ jobs:
       - name: Build package (Linux)
         if: runner.os == 'Linux'
         run: |
-          docker run --rm --name manylinux -v $(pwd):/bytecorefast $MANYLINUX_DOCKER_IMAGE /bin/bash -c "cd bytecorefast && /opt/python/cp311-cp311/bin/python3.11 -m build && mkdir dist/wheels && mv dist/*.whl dist/wheels && auditwheel repair dist/wheels/*.whl -w dist/ && rm -rf dist/wheels"
+          docker run --rm --name manylinux -v $(pwd):/${{ env.PACKAGE_NAME }} $MANYLINUX_DOCKER_IMAGE /bin/bash -c "cd ${{ env.PACKAGE_NAME }} && /opt/python/cp311-cp311/bin/python3.11 -m build && mkdir dist/wheels && mv dist/*.whl dist/wheels && auditwheel repair dist/wheels/*.whl -w dist/ && rm -rf dist/wheels"
       - name: Build package (macOS and Windows)
         if: runner.os == 'macOS' || runner.os == 'Windows'
         run: python -m build
       - name: Test self building package
         run: |
-          pip install dist/bytecorefast-*.tar.gz
-          python -c "import bytecorefast; print(bytecorefast)"
+          pip install dist/${{ env.PACKAGE_NAME }}-*.tar.gz
+          python -c "import ${{ env.PACKAGE_NAME }}; print(${{ env.PACKAGE_NAME }})"
         shell: bash
       - name: Upload distribution archives
         uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808
@@ -124,6 +125,9 @@ jobs:
     permissions:
       id-token: write
 
+    env:
+      PACKAGE_NAME: bytecorefast
+
     steps:
     - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
     - name: Download combined distribution archives
@@ -142,19 +146,19 @@ jobs:
       run: |
         for file in dist/*; do
           filename=$(basename "$file")
-          if [[ $filename != bytecorefast-$TAG* ]]; then
-            echo "File $filename does not start with bytecorefast-$TAG"
+          if [[ $filename != ${{ env.PACKAGE_NAME }}-$TAG* ]]; then
+            echo "File $filename does not start with ${{ env.PACKAGE_NAME }}-$TAG"
             exit 1
           fi
         done
-        echo "All files in dist directory start with bytecorefast-$TAG"
+        echo "All files in dist directory start with ${{ env.PACKAGE_NAME }}-$TAG"
     - name: Verify existence of source distribution archive
       run: |
-        if [[ ! -f dist/bytecorefast-$TAG.tar.gz ]]; then
-          echo "Error: dist/bytecorefast-$TAG.tar.gz does not exist."
+        if [[ ! -f dist/${{ env.PACKAGE_NAME }}-$TAG.tar.gz ]]; then
+          echo "Error: dist/${{ env.PACKAGE_NAME }}-$TAG.tar.gz does not exist."
           exit 1
         fi
-        echo "dist/bytecorefast-$TAG.tar.gz exists."
+        echo "dist/${{ env.PACKAGE_NAME }}-$TAG.tar.gz exists."
     - name: Verify version in pyproject.toml
       run: |
         VERSION=$(grep --perl-regexp --only-matching '(?<=^version = ")[^"]*' pyproject.toml)
