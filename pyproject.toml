@@ -10,7 +10,7 @@ authors = [
 ]
 description = "A high-performance, 8-bit CPU emulator, designed as a drop-in replacement for ByteCore, offering enhanced speed while maintaining full compatibility with the original ByteCore interfaces."
 dependencies = [
-  "bytecore==1.1.1"
+  "bytecore==1.1.2"
 ]
 readme = "README.md"
 requires-python = ">=3.11"
