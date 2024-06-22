@@ -9,4 +9,4 @@ types-setuptools
 wheel
 twine
 psutil>=5.9.8,<6.1.0
-bytecore==1.1.1
+bytecore==1.1.2
