@@ -5,10 +5,6 @@ from bytecorefast.state import State
 
 
 class TestState:
-    def test_dummy_test(self) -> None:
-        # Arrange, act and assert
-        assert 0 == 0
-
     def test__from_raw__default_values__returns_default_values(self) -> None:
         # Arrange
         memory = Memory.get_default_memory_bytes()

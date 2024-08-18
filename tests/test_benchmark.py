@@ -4,10 +4,6 @@ from benchmarks.benchmark import Benchmark
 
 
 class TestBenchmark:
-    def test_dummy_test(self) -> None:
-        # Arrange, act and assert
-        assert 0 == 0
-
     def test__get_bytecore_assembly_program_that_uses_exactly_100_000_cycles__manually_cycle_until_halt__count_is_equal_to_expected_value(self) -> None:
         # Arrange
         expected_cycles_count = 100_000
