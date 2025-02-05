@@ -29,9 +29,9 @@ pip3 install bytecorefast
 pip3 install -r requirements.txt
 ```
 
-### Gitpod Setup
+### Codespaces Setup
 
-You can also use Gitpod to run the emulator by clicking [here](https://gitpod.io/#https://github.com/joakimwinum/bytecorefast).
+You can also use Codespaces to run the emulator by clicking [here](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=joakimwinum/bytecorefast).
 
 ## How to Use
 
