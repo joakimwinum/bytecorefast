@@ -10,11 +10,7 @@ class Cpu:
 
     @staticmethod
     def is_cpu_speed_available() -> bool:
-        try:
-            psutil.cpu_freq()
-        except RuntimeError as e:
-            return False
-        return True
+        return callable(getattr(psutil, "cpu_freq", None))
 
     @staticmethod
     def get_cpu_speed_in_hz() -> int:
